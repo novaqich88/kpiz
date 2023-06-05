@@ -1,0 +1,108 @@
+#include <iostream>
+#include <list>
+#include <algorithm>
+
+struct Employee {
+    int employeeId;
+    std::string fullName;
+    std::string education;
+    int startYear;
+    std::string address;
+    double salary;
+};
+
+std::list<Employee> employeeList;
+
+void addEmployee() {
+    Employee newEmployee;
+    std::cout << "Enter employee details:\n";
+    
+    std::cout << "Employee ID: ";
+    std::cin >> newEmployee.employeeId;
+
+    std::cout << "Full Name: ";
+    std::cin.ignore(); // Ignore the newline character from the previous input
+    std::getline(std::cin, newEmployee.fullName);
+
+    std::cout << "Education: ";
+    std::getline(std::cin, newEmployee.education);
+
+    std::cout << "Start Year: ";
+    std::cin >> newEmployee.startYear;
+
+    std::cout << "Address: ";
+    std::cin.ignore();
+    std::getline(std::cin, newEmployee.address);
+
+    std::cout << "Salary: ";
+    std::cin >> newEmployee.salary;
+
+    employeeList.push_back(newEmployee);
+    std::cout << "Employee added successfully.\n";
+}
+
+void removeEmployee() {
+    int employeeId;
+    std::cout << "Enter the employee ID to remove: ";
+    std::cin >> employeeId;
+
+    auto it = std::find_if(employeeList.begin(), employeeList.end(), [employeeId](const Employee& emp) {
+        return emp.employeeId == employeeId;
+    });
+
+    if (it != employeeList.end()) {
+        employeeList.erase(it);
+        std::cout << "Employee removed successfully.\n";
+    } else {
+        std::cout << "Employee not found.\n";
+    }
+}
+
+void printEmployees() {
+    employeeList.sort([](const Employee& emp1, const Employee& emp2) {
+        return emp1.fullName < emp2.fullName;
+    });
+
+    std::cout << "Employee List:\n";
+    for (const auto& emp : employeeList) {
+        std::cout << "Employee ID: " << emp.employeeId << "\n";
+        std::cout << "Full Name: " << emp.fullName << "\n";
+        std::cout << "Education: " << emp.education << "\n";
+        std::cout << "Start Year: " << emp.startYear << "\n";
+        std::cout << "Address: " << emp.address << "\n";
+        std::cout << "Salary: " << emp.salary << "\n\n";
+    }
+}
+
+int main() {
+    int choice;
+
+    while (true) {
+        std::cout << "Menu:\n";
+        std::cout << "1. Add Employee\n";
+        std::cout << "2. Remove Employee\n";
+        std::cout << "3. Print Employees\n";
+        std::cout << "4. Exit\n";
+        std::cout << "Enter your choice: ";
+        std::cin >> choice;
+
+        switch (choice) {
+            case 1:
+                addEmployee();
+                break;
+            case 2:
+                removeEmployee();
+                break;
+            case 3:
+                printEmployees();
+                break;
+            case 4:
+                std::cout << "Exiting program.\n";
+                return 0;
+            default:
+                std::cout << "Invalid choice. Please try again.\n";
+        }
+    }
+
+    return 0;
+}
